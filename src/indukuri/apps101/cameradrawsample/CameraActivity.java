@@ -12,15 +12,17 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
 import android.widget.FrameLayout;
-
+/**
+ * The main activity of this project.  
+ */
 public class CameraActivity extends Activity {
 	private FrameLayout layout ;
 	private PictureSaver saver ;
 	
 	// May seem like bad programming practice but we highly recommend
-	// that only a single instance of this object ever exist and all 
-	// classes use that specific instance.  Using the camera is a very
-	// strict state machine.
+	// (by us and Google) that only a single instance of this object 
+	// ever exist and all classes use that specific instance.  Using 
+	// the camera is a very strict state machine.
 	public static Camera mCamera ;
 
 	@Override

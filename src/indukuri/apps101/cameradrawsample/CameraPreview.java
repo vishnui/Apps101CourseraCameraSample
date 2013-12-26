@@ -14,8 +14,23 @@ import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
-/** A basic Camera preview class */
-public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback {
+/** 
+ * I encourage you to check out the full documentation for a SurfaceView at TODO
+ * but I shall provide a quick non-exhaustive explanation here.  Basically a 
+ * SurfaceView is a View that allows us to draw on it however we like.  So 
+ * our approach to showing a preview of the camera on the screen is to put a 
+ * custom SurfaceView called CameraPreview (See TODO for creating custom view.  
+ * TL;DR Just subclass a view and override methods whose behavior you want to 
+ * customize) in our layout xml file, getting a reference to it, and connecting 
+ * it to the camera via camera.setPreviewDisplay(holder) (line 54).  The holder
+ * is a SurfaceHolder.  You see, managing a SurfaceView is hard tedious work so we
+ * let the OS do that via a SurfaceHolder.  SurfaceHolders come automatically with
+ * SurfaceViews and we do not need to configure it in anyway.  We need only 
+ * implement the SurfaceHolder.Callback interface which will notify us when the 
+ * SurfaceView has been created, changed (user switched screen orientation etc.), 
+ * and destroyed.
+*/
+public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback  {
     private SurfaceHolder mHolder;
     private final String TAG = "CameraDrawingSampleApp" ;
 
@@ -32,12 +47,14 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
         mHolder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
     }
 
-    // Callback methods
+    // Callback methods.  These get called when specific events happen in the
+    // the lifecycle of the preview surface.
     // ------------------------------------------------------------------
     public void surfaceCreated(SurfaceHolder holder) {
     	// Open camera 
 		CameraActivity.mCamera = Camera.open();            
 		CameraActivity.mCamera.setDisplayOrientation(90);
+		
         // The Surface has been created, now tell the camera where to draw the preview.
         try {
 			CameraActivity.mCamera.setPreviewDisplay(holder);
@@ -47,6 +64,9 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
         CameraActivity.mCamera.startPreview();
     }
     public void surfaceDestroyed(SurfaceHolder holder) {
+    	// When user leaves the screen, the camera MUST be released.  If
+    	// not it will not be available to any other app on the phone.
+    	// User no like camera no work.  User like take selfies.
     	if(CameraActivity.mCamera == null) return; 
     	CameraActivity.mCamera.release();
     	CameraActivity.mCamera = null;

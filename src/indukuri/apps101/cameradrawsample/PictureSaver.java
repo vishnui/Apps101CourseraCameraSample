@@ -23,6 +23,10 @@ import android.os.Environment;
 import android.util.Log;
 import android.widget.Toast;
 
+/**
+ * A utility class that manages saving the image
+ * and loading it into a Canvas for drawing.
+ */
 public class PictureSaver {
 	private static final String TAG = "CameraDrawingSample";
 	private static final String STORAGE_PROBLEM = "Sorry.  Problem saving picture.";
@@ -65,6 +69,12 @@ public class PictureSaver {
 	        Uri contentUri = Uri.fromFile(pictureFile);
 	        mediaScanIntent.setData(contentUri);
 	        mContext.sendBroadcast(mediaScanIntent);
+	        
+	        // Send the picture to the DrawActivity
+	        Intent intent = new Intent(mContext, DrawActivity.class);
+	        intent.putExtra("pictureFileName", pictureFile.getAbsolutePath());
+	        intent.putExtra("picture", data);
+	        mContext.startActivity(intent);
 	    }
 	};
 	
